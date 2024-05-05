@@ -2,3 +2,4 @@ easyocr
 Pillow
 playwright
 autocorrect
+diskcache

@@ -5,11 +5,27 @@ from playwright.sync_api import Page, expect, sync_playwright
 import io
 # from autocorrect import Speller
 import easyocr
+import diskcache
+import hashlib
 
 # spell = Speller(only_replacements=True)
 reader = easyocr.Reader(['en'])
 
+
+cache = diskcache.Cache('screenshot_cache')
+
+def hash_image(image_bytes):
+    return hashlib.md5(image_bytes).hexdigest()
+
 def extract_text_and_bbox(image_bytes):
+    image_hash = hash_image(image_bytes)
+    if image_hash in cache:
+        # print("Cache hit, using pre-stored results")
+        return cache[image_hash]
+    else:
+        pass
+        # print("Didn't found cache")
+
     results = reader.readtext(image_bytes)
     text_bbox_list = []
     for res in results:
@@ -19,6 +35,8 @@ def extract_text_and_bbox(image_bytes):
         width = max(bbox[0][0], bbox[1][0], bbox[2][0], bbox[3][0]) - x
         height = max(bbox[0][1], bbox[1][1], bbox[2][1], bbox[3][1]) - y
         text_bbox_list.append((res[1], [x, y, width, height]))
+
+    cache[image_hash] = text_bbox_list
     return text_bbox_list
 
 def wait_for_text(page: Page, text: str, timeout: int = 10):
