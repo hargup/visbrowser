@@ -80,6 +80,7 @@ def hover(page: Page, text: str):
             return
     raise ValueError(f"Text '{text}' not found on the page.")
 
+@cache.memoize()
 def match_template(screenshot_image, target_image, confidence: float = 0.8):
     result = cv2.matchTemplate(np.array(screenshot_image), np.array(target_image), cv2.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
@@ -93,7 +94,8 @@ def match_template(screenshot_image, target_image, confidence: float = 0.8):
     else:
         return None
 
-def find_image_on_screen(page: Page, image_path: str, confidence: float = 0.8):
+
+def find_image_on_screen(page: Page, image_path: str, confidence: float = 0.6):
     screenshot_bytes = page.screenshot()
     screenshot_image = Image.open(io.BytesIO(screenshot_bytes))
     target_image = Image.open(image_path)
@@ -107,7 +109,7 @@ def click_image(page: Page, image_path: str, confidence: float = 0.8):
     else:
         raise ValueError(f"Image '{image_path}' not found on the page with confidence {confidence}.")
 
-def wait_for_image(page: Page, image_path: str, timeout: float = 10.0, confidence: float = 0.8):
+def wait_for_image(page: Page, image_path: str, timeout: float = 10.0, confidence: float = 0.6):
     start_time = time.time()
     while time.time() - start_time < timeout:
         coordinates = find_image_on_screen(page, image_path, confidence)
