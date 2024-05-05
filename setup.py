@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='visbrowser',
-    version='0.2.2',
+    version='0.3.0',
     author='Harsh Gupta',
     author_email='harsh@felvin.com',
     description='A visual browsing adapter for Playwright Python',
@@ -17,7 +17,6 @@ setup(
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
