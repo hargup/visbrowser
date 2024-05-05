@@ -3,3 +3,4 @@ Pillow
 playwright
 autocorrect
 diskcache
+opencv-python

@@ -7,6 +7,8 @@ import io
 import easyocr
 import diskcache
 import hashlib
+import cv2
+import numpy as np
 
 # spell = Speller(only_replacements=True)
 reader = easyocr.Reader(['en'])
@@ -77,3 +79,39 @@ def hover(page: Page, text: str):
             page.mouse.move(center_x, center_y)
             return
     raise ValueError(f"Text '{text}' not found on the page.")
+
+def match_template(screenshot_image, target_image, confidence: float = 0.8):
+    result = cv2.matchTemplate(np.array(screenshot_image), np.array(target_image), cv2.TM_CCOEFF_NORMED)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+
+    if max_val >= confidence:
+        top_left = max_loc
+        bottom_right = (top_left[0] + target_image.width, top_left[1] + target_image.height)
+        center_x = (top_left[0] + bottom_right[0]) // 2
+        center_y = (top_left[1] + bottom_right[1]) // 2
+        return center_x, center_y
+    else:
+        return None
+
+def find_image_on_screen(page: Page, image_path: str, confidence: float = 0.8):
+    screenshot_bytes = page.screenshot()
+    screenshot_image = Image.open(io.BytesIO(screenshot_bytes))
+    target_image = Image.open(image_path)
+    return match_template(screenshot_image, target_image, confidence)
+
+def click_image(page: Page, image_path: str, confidence: float = 0.8):
+    coordinates = find_image_on_screen(page, image_path, confidence)
+    if coordinates:
+        center_x, center_y = coordinates
+        page.mouse.click(center_x, center_y)
+    else:
+        raise ValueError(f"Image '{image_path}' not found on the page with confidence {confidence}.")
+
+def wait_for_image(page: Page, image_path: str, timeout: float = 10.0, confidence: float = 0.8):
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        coordinates = find_image_on_screen(page, image_path, confidence)
+        if coordinates:
+            return True
+        time.sleep(0.5)
+    return False
