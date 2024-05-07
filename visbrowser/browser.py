@@ -94,7 +94,6 @@ def match_template(screenshot_image, target_image, confidence: float = 0.8):
     else:
         return None
 
-
 def find_image_on_screen(page: Page, image_path: str, confidence: float = 0.6):
     screenshot_bytes = page.screenshot()
     screenshot_image = Image.open(io.BytesIO(screenshot_bytes))
