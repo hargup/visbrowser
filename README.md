@@ -1,30 +1,13 @@
 # VisBrowser: Visual Browsing Adapter for Playwright Python
 
-The Visual Browser Adapter is a Python library that provides a high-level and intuitive API for interacting with web pages using Playwright. It simplifies common tasks like clicking, typing, and waiting for elements, making it easier to automate web browsing and testing.
+VisBrowser is a visual browsing adapter for Playwright Python that enables navigation and interaction with web pages based on visual information rather than CSS selectors. It provides a high-level API for performing actions like clicking, typing, and waiting for elements using visual cues such as text and images. With VisBrowser, you can automate web browsing tasks by leveraging the visual layout and content of the page, making your scripts more resilient to changes in the underlying HTML structure. Particularly useful for website which doesn't give a proper dom, like fuller website, or websites using HTML canvas.
 
 ## Installation
 
 To install the Visual Browser Adapter, use pip:
 
 ```
-pip install visbrowser
-```
-
-## Usage
-
-Here's a basic example of how to use the Visual Browser Adapter:
-
-```python
-import visbrowser as vb
-
-# Perform actions on the page
-vb.click(page, "Enter mobile number")
-vb.type(page, "9999988888")
-vb.wait_for_text(page, "Enter MPIN", timeout=5000)
-vb.click(page, "Enter MPIN")
-vb.type(page, "2020")
-vb.wait_for_text(page, "Login", timeout=5000)
-vb.click(page, "Login")
+pip install git+https://github.com/hargup/visbrowser.git
 ```
 
 ## API Reference
@@ -80,3 +63,12 @@ Waits for the specified text to appear on the page.
 ## Contributing
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request on the GitHub repository.
+
+
+## License
+
+The code is licensed under GPLv3.
+
+## Automation Consulting and dual licensing
+
+If you are looking to build automation scripts for your company, say a script to periodically download data from a website, or automatically tweet a certain thing at a schedule or something else. Please contact me at harsh AT felvin DOT com, send me a quick video of you doing the task value and we'll get back to you with a quote, typical price being $300 per script.
