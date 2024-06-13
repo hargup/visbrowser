@@ -41,7 +41,7 @@ def extract_text_and_bbox(image_bytes):
     cache[image_hash] = text_bbox_list
     return text_bbox_list
 
-def wait_for_text(page: Page, text: str, timeout: int = 10):
+def wait_for_text(page: Page, text: str, timeout: int = 30):
     start_time = time.time()
     while True:
         screenshot_bytes = page.screenshot()
@@ -116,7 +116,7 @@ def click_image(page: Page, image_path: str, confidence: float = 0.8):
     else:
         raise ValueError(f"Image '{image_path}' not found on the page with confidence {confidence}.")
 
-def wait_for_image(page: Page, image_path: str, timeout: float = 10.0, confidence: float = 0.6):
+def wait_for_image(page: Page, image_path: str, timeout: float = 30.0, confidence: float = 0.6):
     start_time = time.time()
     while time.time() - start_time < timeout:
         coordinates = find_image_on_screen(page, image_path, confidence)
