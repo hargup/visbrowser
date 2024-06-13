@@ -82,7 +82,15 @@ def hover(page: Page, text: str):
 
 @cache.memoize()
 def match_template(screenshot_image, target_image, confidence: float = 0.8):
-    result = cv2.matchTemplate(np.array(screenshot_image), np.array(target_image), cv2.TM_CCOEFF_NORMED)
+    # Convert images to grayscale
+    screenshot_gray = cv2.cvtColor(np.array(screenshot_image), cv2.COLOR_BGR2GRAY)
+    target_gray = cv2.cvtColor(np.array(target_image), cv2.COLOR_BGR2GRAY)
+
+    # Ensure the images are in 8-bit format
+    screenshot_gray = np.uint8(screenshot_gray)
+    target_gray = np.uint8(target_gray)
+
+    result = cv2.matchTemplate(screenshot_gray, target_gray, cv2.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
 
     if max_val >= confidence:
